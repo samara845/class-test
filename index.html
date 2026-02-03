@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HTML Online Test</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f2f2f2;
+}
+.question{
+  background:#fff;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:6px;
+}
+.correct{
+  border-left:6px solid green;
+  background:#e9ffe9;
+}
+.wrong{
+  border-left:6px solid red;
+  background:#ffecec;
+}
+button{
+  padding:12px 20px;
+  font-size:16px;
+  cursor:pointer;
+}
+#resultBox{
+  background:#fff;
+  padding:15px;
+  margin-top:20px;
+  border-radius:6px;
+  font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>HTML Important Test (50 Questions)</h2>
+<p>Each Question = 1 Mark</p>
+
+<input type="text" id="name" placeholder="Enter Your Name" required><br><br>
+
+<form id="testForm"></form>
+
+<button onclick="submitTest()">Submit Test</button>
+
+<div id="resultBox" style="display:none;"></div>
+
+<script>
+// ================= ANSWERS =================
+const answers = {
+q1:"a",q2:"b",q3:"b",q4:"c",q5:"b",
+q6:"c",q7:"b",q8:"b",q9:"c",q10:"b",
+q11:"c",q12:"b",q13:"a",q14:"c",q15:"c",
+q16:"c",q17:"b",q18:"b",q19:"c",q20:"c",
+q21:"b",q22:"b",q23:"b",q24:"c",q25:"b",
+q26:"b",q27:"c",q28:"c",q29:"c",q30:"c",
+q31:"b",q32:"c",q33:"c",q34:"c",q35:"c",
+q36:"c",q37:"b",q38:"c",q39:"c",q40:"c",
+q41:"b",q42:"a",q43:"a",q44:"a",q45:"c",
+q46:"b",q47:"c",q48:"b",q49:"c",q50:"c"
+};
+
+// ================= QUESTIONS =================
+const questions = [
+["HTML ka full form kya hai?","Hyper Text Markup Language","High Text Machine Language","Hyper Tool Markup Language"],
+["HTML ka use kis ke liye hota hai?","Programming","Web page design ke liye","Database ke liye"],
+["HTML file ka extension kya hota hai?",".ht",".html",".web"],
+["HTML me sabse bada heading tag kaunsa hai?","&lt;h6&gt;","&lt;h4&gt;","&lt;h1&gt;"],
+["Paragraph ke liye kaunsa tag use hota hai?","&lt;para&gt;","&lt;p&gt;","&lt;text&gt;"],
+
+["Line break ke liye kaunsa tag hai?","&lt;break&gt;","&lt;lb&gt;","&lt;br&gt;"],
+["Horizontal line ke liye kaunsa tag hai?","&lt;line&gt;","&lt;hr&gt;","&lt;br&gt;"],
+["Image add karne ke liye kaunsa tag hai?","&lt;image&gt;","&lt;img&gt;","&lt;pic&gt;"],
+["Image tag ka mandatory attribute kaunsa hai?","width","height","src"],
+["Link banane ke liye kaunsa tag use hota hai?","&lt;link&gt;","&lt;a&gt;","&lt;href&gt;"],
+
+["Ordered list ka tag?","&lt;ul&gt;","&lt;list&gt;","&lt;ol&gt;"],
+["Unordered list ka tag?","&lt;ol&gt;","&lt;ul&gt;","&lt;list&gt;"],
+["List item ka tag?","&lt;li&gt;","&lt;item&gt;","&lt;i&gt;"],
+["HTML root element kaunsa hai?","&lt;body&gt;","&lt;head&gt;","&lt;html&gt;"],
+["Page title ke liye tag?","&lt;head&gt;","&lt;meta&gt;","&lt;title&gt;"],
+
+["HTML comment syntax?","//","/* */","&lt;!-- --&gt;"],
+["Old HTML background color attribute?","color","bgcolor","background"],
+["Table banane ka tag?","&lt;tab&gt;","&lt;table&gt;","&lt;tr&gt;"],
+["Table row ka tag?","&lt;td&gt;","&lt;th&gt;","&lt;tr&gt;"],
+["Table heading cell tag?","&lt;td&gt;","&lt;tr&gt;","&lt;th&gt;"],
+
+["Form ka tag?","&lt;input&gt;","&lt;form&gt;","&lt;data&gt;"],
+["Text input field?","&lt;textbox&gt;","&lt;input type='text'&gt;","&lt;field&gt;"],
+["Radio button type?","checkbox","radio","select"],
+["Checkbox type?","radio","text","checkbox"],
+["Submit button type?","button","submit","send"],
+
+["Video tag?","&lt;media&gt;","&lt;video&gt;","&lt;movie&gt;"],
+["Audio tag?","&lt;music&gt;","&lt;sound&gt;","&lt;audio&gt;"],
+["HTML5 semantic tag?","&lt;div&gt;","&lt;span&gt;","&lt;section&gt;"],
+["Navigation tag?","&lt;menu&gt;","&lt;navigate&gt;","&lt;nav&gt;"],
+["Footer tag?","&lt;foot&gt;","&lt;bottom&gt;","&lt;footer&gt;"],
+
+["HTML case-sensitive hota hai?","Yes","No","Sometimes"],
+["Latest HTML version?","HTML4","XHTML","HTML5"],
+["Inline element example?","&lt;div&gt;","&lt;p&gt;","&lt;span&gt;"],
+["Block element example?","&lt;span&gt;","&lt;a&gt;","&lt;div&gt;"],
+["iframe ka use?","Image","Video","Another webpage embed"],
+
+["Attribute kaha likhte hain?","Closing tag","Content","Opening tag"],
+["Style attribute ka use?","JS","CSS","Database"],
+["Meta tag ka use?","Image","Script","SEO info"],
+["Character encoding meta?","name","http-equiv","charset"],
+["Favicon add karne ka tag?","&lt;icon&gt;","&lt;meta&gt;","&lt;link&gt;"],
+
+["Bold text tag?","&lt;bold&gt;","&lt;b&gt;","&lt;strong&gt;"],
+["Italic text tag?","&lt;i&gt;","&lt;italic&gt;","&lt;em&gt;"],
+["Underline tag?","&lt;u&gt;","&lt;line&gt;","&lt;br&gt;"],
+["Superscript tag?","&lt;sup&gt;","&lt;top&gt;","&lt;power&gt;"],
+["Subscript tag?","&lt;sup&gt;","&lt;down&gt;","&lt;sub&gt;"],
+
+["Dropdown tag?","&lt;input&gt;","&lt;select&gt;","&lt;list&gt;"],
+["Dropdown option tag?","&lt;choice&gt;","&lt;select&gt;","&lt;option&gt;"],
+["Marquee ka use?","Image","Scrolling text","Video"],
+["Deprecated tag example?","&lt;div&gt;","&lt;span&gt;","&lt;font&gt;"],
+["External CSS tag?","&lt;style&gt;","&lt;css&gt;","&lt;link&gt;"]
+];
+
+// ================= LOAD QUESTIONS =================
+const form = document.getElementById("testForm");
+
+questions.forEach((q,i)=>{
+  form.innerHTML += `
+  <div class="question" id="box${i+1}">
+    <p><b>${i+1}.</b> ${q[0]}</p>
+    <label><input type="radio" name="q${i+1}" value="a"> ${q[1]}</label><br>
+    <label><input type="radio" name="q${i+1}" value="b"> ${q[2]}</label><br>
+    <label><input type="radio" name="q${i+1}" value="c"> ${q[3]}</label>
+  </div>`;
+});
+
+// ================= SUBMIT TEST =================
+function submitTest(){
+  let score = 0;
+  let data = {};
+
+  data.name = document.getElementById("name").value;
+
+  for(let i=1;i<=50;i++){
+    let ans = document.querySelector(`input[name="q${i}"]:checked`);
+    let userAns = ans ? ans.value : "";
+
+    data["q"+i] = userAns;
+
+    if(userAns === answers["q"+i]){
+      score++;
+      document.getElementById("box"+i).classList.add("correct");
+    } else {
+      document.getElementById("box"+i).classList.add("wrong");
+    }
+  }
+
+  let percentage = ((score/50)*100).toFixed(2);
+
+  data.score = score;
+  data.percentage = percentage;
+
+  document.getElementById("resultBox").style.display="block";
+  document.getElementById("resultBox").innerHTML = `
+    <b>Result</b><br>
+    Total Questions: 50<br>
+    Correct: ${score}<br>
+    Wrong: ${50-score}<br>
+    Percentage: ${percentage}%
+  `;
+
+  // 🔴 YAHAN APNA GOOGLE SCRIPT URL PASTE KARO
+  fetch("https://script.google.com/macros/s/AKfycbyoYXKSOKCBLpojFbAKGq1iiYL1sgK-m5lXAseUKaS99xnkaWi4S-gUfIi-dOtVgDWXtw/exec",{
+    method:"POST",
+    body: JSON.stringify(data)
+  });
+
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+</script>
+
+</body>
+</html>
